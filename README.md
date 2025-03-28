@@ -14,6 +14,7 @@ Merupakan class graphics user interface untuk program ini. GUI meliputi dari JPa
 Merupakan class untuk menangani koneksi dan perintah-perintah dengan database. Atribut terdiri dari Connection dan Statement.
 * Connection, atribut yang menyimpan koneksi antar program dengan database yang tersimpan atau ingin diakses.
 * Statement, atribut yang menangani query SQL yang dieksekusi.
+
 Class ini juga terdapat *dua* method:
 * selectQuery, method untuk menjalankan query yang berfungsi untuk SELECT dan menampung hasil SELECT tersebut.
 * insertUpdateDeleteQuery, method untuk menjalankan query selain SELECT.
