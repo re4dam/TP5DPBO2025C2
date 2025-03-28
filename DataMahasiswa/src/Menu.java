@@ -34,6 +34,7 @@ public class Menu extends JFrame{
     private int selectedIndex = -1;
     // list untuk menampung semua mahasiswa
     private ArrayList<Mahasiswa> listMahasiswa;
+    // database untuk program ini
     private Database database;
 
     private JPanel mainPanel;
@@ -157,12 +158,13 @@ public class Menu extends JFrame{
 
             int i = 0;
             while(resultSet.next()) {
-                Object[] row = new Object[4];
+                Object[] row = new Object[5];
 
                 row[0] = i + 1;
                 row[1] = resultSet.getString("nim");
                 row[2] = resultSet.getString("nama");
-                row[3] = resultSet.getString("jenis kelamin");
+                row[3] = resultSet.getString("jenis_kelamin");
+                row[4] = resultSet.getString("status_mahasiswa");
 
                 temp.addRow(row);
                 i++;
@@ -182,7 +184,7 @@ public class Menu extends JFrame{
         String status = aktifRadioButton.isSelected() ? "Aktif" : "Cuti";
 
         // tambahkan data ke dalam database
-        String sql = "INSERT INTO mahasiswa VALUES (null, '" + nim + "', '" + nama + "', '" + jenisKelamin + "')";
+        String sql = "INSERT INTO mahasiswa VALUES (null, '" + nim + "', '" + nama + "', '" + jenisKelamin + "', '" + status + "')";
         database.insertUpdateDeleteQuery(sql);
 
         // update tabel
@@ -198,17 +200,34 @@ public class Menu extends JFrame{
     }
 
     public void updateData() {
-        // ambil data dari form
-        String nim = nimField.getText();
+        // Ambil data dari form
+        String nimLama = mahasiswaTable.getValueAt(mahasiswaTable.getSelectedRow(), 1).toString();
+        String nimBaru = nimField.getText();
         String nama = namaField.getText();
         String jenisKelamin = jenisKelaminComboBox.getSelectedItem().toString();
         String status = aktifRadioButton.isSelected() ? "Aktif" : "Cuti";
+        int id = -1;
 
-        // ubah data mahasiswa di list
-        listMahasiswa.get(selectedIndex).setNim(nim);
-        listMahasiswa.get(selectedIndex).setNama(nama);
-        listMahasiswa.get(selectedIndex).setJenisKelamin(jenisKelamin);
-        listMahasiswa.get(selectedIndex).setStatusMahasiswa(status);
+        // Cari ID berdasarkan NIM
+        try {
+            ResultSet resultSet = database.selectQuery("SELECT id FROM mahasiswa WHERE nim = '" + nimLama + "'");
+            if (resultSet.next()) {
+                id = resultSet.getInt("id");
+            } else {
+                System.out.println("NIM tidak ditemukan!");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        System.out.println("ID Mahasiswa: " + id);
+
+        // mengupdate data ke dalam database
+        String sql = "UPDATE mahasiswa SET nim = '" + nimBaru + "', nama = '" + nama + "', jenis_kelamin = '" + jenisKelamin + "', status_mahasiswa = '" + status + "' WHERE id = " + id;
+        System.out.println(sql);
+        database.insertUpdateDeleteQuery(sql);
 
         // update tabel
         mahasiswaTable.setModel(setTable());
@@ -223,8 +242,26 @@ public class Menu extends JFrame{
     }
 
     public void deleteData() {
-        // hapus data dari list
-        listMahasiswa.remove(selectedIndex);
+        String nim = mahasiswaTable.getValueAt(mahasiswaTable.getSelectedRow(), 1).toString();
+        int id;
+
+        // Cari ID berdasarkan NIM
+        try {
+            ResultSet resultSet = database.selectQuery("SELECT id FROM mahasiswa WHERE nim = '" + nim + "'");
+            if (resultSet.next()) {
+                id = resultSet.getInt("id");
+            } else {
+                System.out.println("NIM tidak ditemukan!");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // menghapus data dari database
+        String sql = "DELETE FROM mahasiswa WHERE id = " + id + "";
+        database.insertUpdateDeleteQuery(sql);
 
         // update tabel
         mahasiswaTable.setModel(setTable());
