@@ -35,8 +35,4 @@ Memilih data terlebih dahulu. Opsi Delete akan muncul. Formulir Data terisi deng
 Setelah melakukan salah satu perintah di atas (`Add`, `Update`, ataupun `Delete`). Formulir akan dibersihkan datanya sehingga tidak ada satu pun nilai yang mengisi kolom formulir tersebut.
 
 ## Dokumentasi
-![Video Demo](https://github.com/user-attachments/assets/df0361fa-37d9-470c-b35a-d483ecbecd3f)
-<video>
-  <source src="https://github.com/user-attachments/assets/df0361fa-37d9-470c-b35a-d483ecbecd3f" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/079318be-31a3-4fda-8ac8-f8edb80c9342
