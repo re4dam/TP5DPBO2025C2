@@ -36,7 +36,7 @@ Setelah melakukan salah satu perintah di atas (`Add`, `Update`, ataupun `Delete`
 
 ## Dokumentasi
 ![Video Demo](https://github.com/user-attachments/assets/df0361fa-37d9-470c-b35a-d483ecbecd3f)
-<video width="1280" controls>
+<video>
   <source src="https://github.com/user-attachments/assets/df0361fa-37d9-470c-b35a-d483ecbecd3f" type="video/mp4">
   Your browser does not support the video tag.
 </video>
