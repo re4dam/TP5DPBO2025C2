@@ -183,6 +183,23 @@ public class Menu extends JFrame{
         String jenisKelamin = jenisKelaminComboBox.getSelectedItem().toString();
         String status = aktifRadioButton.isSelected() ? "Aktif" : "Cuti";
 
+        // memeriksa apakah terdapat field yang kosong
+        if (nim.isEmpty() || nama.isEmpty() || jenisKelamin == null || jenisKelamin.isEmpty() || status.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nilai belum lengkap!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // memeriksa apakah nim yang dimasukkan sudah terdaftar
+            ResultSet resultSet = database.selectQuery("SELECT COUNT(*) FROM mahasiswa WHERE nim = '" + nim + "'");
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(null, "NIM Sudah Terdaftar!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         // tambahkan data ke dalam database
         String sql = "INSERT INTO mahasiswa VALUES (null, '" + nim + "', '" + nama + "', '" + jenisKelamin + "', '" + status + "')";
         database.insertUpdateDeleteQuery(sql);
@@ -222,11 +239,27 @@ public class Menu extends JFrame{
             return;
         }
 
-        System.out.println("ID Mahasiswa: " + id);
+        // memeriksa terlebih dahulu apakah terdapat field yang kosong
+        if (nimBaru.isEmpty() || nama.isEmpty() || jenisKelamin == null || jenisKelamin.isEmpty() || status.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Nilai belum lengkap!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!nimBaru.equals(nimLama)) {
+            try {
+                // memeriksa apakah nim yang dimasukkan sudah terdaftar
+                ResultSet resultSet = database.selectQuery("SELECT COUNT(*) FROM mahasiswa WHERE nim = '" + nimBaru + "'");
+                if (resultSet.next() && resultSet.getInt(1) > 0) {
+                    JOptionPane.showMessageDialog(null, "NIM Sudah Terdaftar!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         // mengupdate data ke dalam database
         String sql = "UPDATE mahasiswa SET nim = '" + nimBaru + "', nama = '" + nama + "', jenis_kelamin = '" + jenisKelamin + "', status_mahasiswa = '" + status + "' WHERE id = " + id;
-        System.out.println(sql);
         database.insertUpdateDeleteQuery(sql);
 
         // update tabel
